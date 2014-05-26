@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 
+
 package org.chiswicked.code.valverine.valve;
 
 import org.apache.catalina.connector.Request;
@@ -31,13 +32,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+
 /**
  * <b>HTTPErrorValve</b> interrupts request processing and throws a specified HTTP error back to the client
  *
  * @author Norbert Metz
  */
-
 public class HTTPErrorValve extends TamperValve {
+
 
     /**
      * Interrupts <code>request</code> processing and throws HTTP 404 Error

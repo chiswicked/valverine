@@ -22,9 +22,11 @@
  * SOFTWARE.
  */
 
+
 package org.chiswicked.code.valverine;
 
 import org.apache.catalina.Valve;
+
 
 /**
  * <b>Valverive</b> provides a set of Valves providing useful with which application running in a Tomacat container
@@ -34,13 +36,14 @@ import org.apache.catalina.Valve;
  *
  * @author Norbert Metz
  */
-
 public class Valverine {
 
     protected Valve valve;
 
+
     public Valverine() {
     }
+
 
     public void setValve(Valve valve) {
         this.valve = valve;

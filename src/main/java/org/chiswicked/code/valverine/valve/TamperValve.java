@@ -22,16 +22,17 @@
  * SOFTWARE.
  */
 
+
 package org.chiswicked.code.valverine.valve;
 
 import org.apache.catalina.valves.ValveBase;
+
 
 /**
  * <b>TamperValve</b> provides frequently used logging and request tampering functionalities for extending Valves
  *
  * @author Norbert Metz
  */
-
 public abstract class TamperValve extends ValveBase {
 
     /**
@@ -48,6 +49,7 @@ public abstract class TamperValve extends ValveBase {
         }
     }
 
+
     /**
      * Create <b>trace</b> level log entry, if enabled by container
      *
@@ -58,6 +60,7 @@ public abstract class TamperValve extends ValveBase {
             this.containerLog.trace(msg);
         }
     }
+
 
     /**
      * Create <b>debug</b> level log entry, if enabled by container
@@ -70,6 +73,7 @@ public abstract class TamperValve extends ValveBase {
         }
     }
 
+
     /**
      * Create <b>info</b> level log entry, if enabled by container
      *
@@ -80,6 +84,7 @@ public abstract class TamperValve extends ValveBase {
             this.containerLog.info(msg);
         }
     }
+
 
     /**
      * Create <b>warn</b> level log entry, if enabled by container
@@ -92,6 +97,7 @@ public abstract class TamperValve extends ValveBase {
         }
     }
 
+
     /**
      * Create <b>erro</b> level log entry, if enabled by container
      *
@@ -102,6 +108,7 @@ public abstract class TamperValve extends ValveBase {
             this.containerLog.error(msg);
         }
     }
+
 
     /**
      * Create <b>fatal</b> level log entry, if enabled by container

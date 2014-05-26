@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 
+
 package org.chiswicked.code.valverine.valve;
 
 import org.apache.catalina.connector.Request;
@@ -30,16 +31,18 @@ import org.apache.catalina.connector.Response;
 import javax.servlet.ServletException;
 import java.io.IOException;
 
+
 /**
  * <b>DelayValve</b> emulates a slow network connection by delaying the arrival of the request through the Pipeline
  *
  * @author Norbert Metz
  */
-
 public class DelayValve extends TamperValve {
 
-    // The default length of the delay in milliseconds
+
+    // Default length of delay in milliseconds
     private int delay = 2000;
+
 
     /**
      * Delay request processing
@@ -55,6 +58,7 @@ public class DelayValve extends TamperValve {
         this.sleep(delay);
         getNext().invoke(request, response);
     }
+
 
     /**
      * Set the length of delay.
