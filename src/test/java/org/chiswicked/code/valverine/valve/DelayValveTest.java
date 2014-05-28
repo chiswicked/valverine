@@ -1,6 +1,8 @@
 package org.chiswicked.code.valverine.valve;
 
 import org.apache.catalina.core.StandardEngine;
+import org.chiswicked.valverine.valves.DelayValve;
+import org.chiswicked.valverine.valves.TamperValve;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

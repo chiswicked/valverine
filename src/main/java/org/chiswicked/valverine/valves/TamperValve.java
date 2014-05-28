@@ -23,7 +23,7 @@
  */
 
 
-package org.chiswicked.code.valverine.valve;
+package org.chiswicked.valverine.valves;
 
 import org.apache.catalina.valves.ValveBase;
 

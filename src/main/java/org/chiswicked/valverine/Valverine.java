@@ -23,7 +23,7 @@
  */
 
 
-package org.chiswicked.code.valverine;
+package org.chiswicked.valverine;
 
 import org.apache.catalina.Valve;
 
@@ -31,10 +31,9 @@ import org.apache.catalina.Valve;
 /**
  * <b>Valverive</b> provides a set of Valves providing useful with which application running in a Tomacat container
  *
- * @see org.chiswicked.code.valverine.valve.DelayValve
- * @see org.chiswicked.code.valverine.valve.HTTPErrorValve
- *
  * @author Norbert Metz
+ * @see org.chiswicked.valverine.valves.DelayValve
+ * @see org.chiswicked.valverine.valves.HTTPErrorValve
  */
 public class Valverine {
 

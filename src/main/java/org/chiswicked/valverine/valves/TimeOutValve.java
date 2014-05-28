@@ -23,7 +23,7 @@
  */
 
 
-package org.chiswicked.code.valverine.valve;
+package org.chiswicked.valverine.valves;
 
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
@@ -37,7 +37,7 @@ import java.io.IOException;
  * Emulates timeout by delaying the request and eventually throwing a HTTP Error 504 Gateway timeout
  * <p/>
  * <b>Example:</b><br/>
- * {@code <Valve className="org.chiswicked.code.valverine.valve.TimeOutValve" delay="10000" />}
+ * {@code <Valve className="TimeOutValve" delay="10000" />}
  * Add the above line to your {@code $CATALINA_HOME/conf/server.xml}'s
  * {@code <Host>} element to delay every incoming request by 10000 milliseconds and force an HTTP Error 504 Gateway timeout
  *

@@ -23,49 +23,26 @@
  */
 
 
-package org.chiswicked.code.valverine.valve;
+package org.chiswicked.valverine.valves;
 
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
 /**
- * <p></p>Emulates slow network connection by delaying the request while travelling through the Pipeline
- * </p>
- * <b>Example:</b><br/>
- * {@code <Valve className="org.chiswicked.code.valverine.valve.DelayValve" delay="1500" />}<br/>
- * Add the above line to your {@code $CATALINA_HOME/conf/server.xml}'s
- * {@code <Host>} element to delay every incoming request by 1500 milliseconds
+ * Interrupts request processing and throws a specified HTTP error back to the client
  *
  * @author Norbert Metz
  */
-public class DelayValve extends TamperValve {
+public class HTTPErrorValve extends TamperValve {
 
 
     /**
-     * Minimum amount of delay (in milliseconds)
-     */
-    public static final int MIN_DELAY = 0;
-
-
-    /**
-     * Minimum amount of delay (in milliseconds)
-     */
-    public static final int DEFAULT_DELAY = 2000;
-    /**
-     * Initiating default amount of delay
-     */
-    private int delay = DelayValve.DEFAULT_DELAY;
-    /**
-     * Minimum amount of delay (in milliseconds)
-     */
-    public static final int MAX_DELAY = 30000;
-
-    /**
-     * Delay request processing
+     * Interrupts <code>request</code> processing and throws HTTP 404 Error
      *
      * @param request  The servlet request to be processed
      * @param response The servlet response to be created
@@ -73,26 +50,7 @@ public class DelayValve extends TamperValve {
      * @throws ServletException if a servlet error occurs, or is thrown by a subsequently invoked Valve, Filter, or Servlet
      */
     @Override
-    public void invoke(Request request, Response response)
-            throws IOException, ServletException {
-        this.delayProcessing(delay);
-        getNext().invoke(request, response);
-    }
-
-
-    /**
-     * <p>Set the length of delay. Invoked automatically if {@code delay} attribute is set in the {@code <Valve>} node,
-     * otherwise the default 2000 milliseconds is used</p>
-     *
-     * @param delay Length of delay in milliseconds (min 0, max 30000)
-     */
-    public synchronized void setDelay(int delay) {
-        if (delay > DelayValve.MAX_DELAY) {
-            this.delay = DelayValve.MAX_DELAY;
-        } else if (delay > DelayValve.MIN_DELAY) {
-            this.delay = delay;
-        } else {
-            this.delay = DelayValve.MIN_DELAY;
-        }
+    public void invoke(Request request, Response response) throws IOException, ServletException {
+        response.sendError(HttpServletResponse.SC_NOT_FOUND);
     }
 }
