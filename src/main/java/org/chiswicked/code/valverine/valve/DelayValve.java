@@ -33,10 +33,10 @@ import java.io.IOException;
 
 
 /**
- * Emulates slow network connection by delaying the request while travelling through the Pipeline
- * <p/>
+ * <p></p>Emulates slow network connection by delaying the request while travelling through the Pipeline
+ * </p>
  * <b>Example:</b><br/>
- * {@code <Valve className="org.chiswicked.code.valverine.valve.DelayValve" delay="1500" />}
+ * {@code <Valve className="org.chiswicked.code.valverine.valve.DelayValve" delay="1500" />}<br/>
  * Add the above line to your {@code $CATALINA_HOME/conf/server.xml}'s
  * {@code <Host>} element to delay every incoming request by 1500 milliseconds
  *
@@ -44,9 +44,24 @@ import java.io.IOException;
  */
 public class DelayValve extends TamperValve {
 
+
+    /**
+     * Minimum amount of delay (in milliseconds)
+     */
     public static final int MIN_DELAY = 0;
+
+
+    /**
+     * Minimum amount of delay (in milliseconds)
+     */
     public static final int DEFAULT_DELAY = 2000;
-    private int delay = DEFAULT_DELAY;
+    /**
+     * Initiating default amount of delay
+     */
+    private int delay = DelayValve.DEFAULT_DELAY;
+    /**
+     * Minimum amount of delay (in milliseconds)
+     */
     public static final int MAX_DELAY = 30000;
 
     /**
@@ -60,7 +75,7 @@ public class DelayValve extends TamperValve {
     @Override
     public void invoke(Request request, Response response)
             throws IOException, ServletException {
-        this.sleep(delay);
+        this.delayProcessing(delay);
         getNext().invoke(request, response);
     }
 

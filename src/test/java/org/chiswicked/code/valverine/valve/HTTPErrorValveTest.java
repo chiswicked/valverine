@@ -1,23 +1,27 @@
 package org.chiswicked.code.valverine.valve;
 
+import org.apache.catalina.core.StandardEngine;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 
-public class HTTPErrorValveTest {
+public class HTTPErrorValveTest extends TamperValveTest {
 
     @Before
     public void setUp() throws Exception {
-
+        super.setUp();
     }
 
     @After
     public void tearDown() throws Exception {
-
+        super.tearDown();
     }
 
-    @Test
-    public void testInvoke() throws Exception {
+    @Override
+    protected TamperValve getConcrete() {
+        TamperValve tamperValve = new HTTPErrorValve();
+        tamperValve.setContainer(new StandardEngine());
+        tamperValve.setNext(terminatorValve);
 
+        return tamperValve;
     }
 }

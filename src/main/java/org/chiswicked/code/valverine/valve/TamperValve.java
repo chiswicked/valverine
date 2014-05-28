@@ -29,7 +29,7 @@ import org.apache.catalina.valves.ValveBase;
 
 
 /**
- * <b>TamperValve</b> provides frequently used logging and request tampering functionalities for extending Valves
+ * Provides frequently used logging and request tampering functionalities for extending Valves
  *
  * @author Norbert Metz
  */
@@ -40,7 +40,7 @@ public abstract class TamperValve extends ValveBase {
      *
      * @param time Time of delay in milliseconds
      */
-    protected void sleep(int time) {
+    protected void delayProcessing(int time) {
         try {
             Thread.sleep(time);
             this.info(String.format("Request processing delayed by %s milliseconds", time));
@@ -50,14 +50,22 @@ public abstract class TamperValve extends ValveBase {
     }
 
 
+    /*
+    For some reason this.containerLog throws java.lang.NullPointerException in unit tests
+    For some reason this.getContainer().getLogger() does not, so using that instead
+    TODO Look into why this.containerLog throws java.lang.NullPointerException in unit tests
+    */
+
+
     /**
      * Create <b>trace</b> level log entry, if enabled by container
      *
      * @param msg Message to be logged
      */
+    @SuppressWarnings("unused")
     protected void trace(String msg) {
-        if (this.containerLog.isTraceEnabled()) {
-            this.containerLog.trace(msg);
+        if (this.getContainer().getLogger().isTraceEnabled()) {
+            this.getContainer().getLogger().trace(msg);
         }
     }
 
@@ -67,9 +75,10 @@ public abstract class TamperValve extends ValveBase {
      *
      * @param msg Message to be logged
      */
+    @SuppressWarnings("unused")
     protected void debug(String msg) {
-        if (this.containerLog.isDebugEnabled()) {
-            this.containerLog.debug(msg);
+        if (this.getContainer().getLogger().isDebugEnabled()) {
+            this.getContainer().getLogger().debug(msg);
         }
     }
 
@@ -79,17 +88,11 @@ public abstract class TamperValve extends ValveBase {
      *
      * @param msg Message to be logged
      */
+    @SuppressWarnings("unused")
     protected void info(String msg) {
         if (this.getContainer().getLogger().isInfoEnabled()) {
             this.getContainer().getLogger().info(msg);
         }
-
-//        For some reason this.containerLog throws java.lang.NullPointerException in unit tests
-//        For some reason this.getContainer().getLogger() does not, so using that instead
-
-//        if (this.containerLog.isInfoEnabled()) {
-//            this.containerLog.info(msg);
-//        }
     }
 
 
@@ -98,9 +101,10 @@ public abstract class TamperValve extends ValveBase {
      *
      * @param msg Message to be logged
      */
+    @SuppressWarnings("unused")
     protected void warn(String msg) {
-        if (this.containerLog.isWarnEnabled()) {
-            this.containerLog.warn(msg);
+        if (this.getContainer().getLogger().isWarnEnabled()) {
+            this.getContainer().getLogger().warn(msg);
         }
     }
 
@@ -110,9 +114,10 @@ public abstract class TamperValve extends ValveBase {
      *
      * @param msg Message to be logged
      */
+    @SuppressWarnings("unused")
     protected void error(String msg) {
-        if (this.containerLog.isErrorEnabled()) {
-            this.containerLog.error(msg);
+        if (this.getContainer().getLogger().isErrorEnabled()) {
+            this.getContainer().getLogger().error(msg);
         }
     }
 
@@ -122,9 +127,10 @@ public abstract class TamperValve extends ValveBase {
      *
      * @param msg Message to be logged
      */
+    @SuppressWarnings("unused")
     protected void fatal(String msg) {
-        if (this.containerLog.isFatalEnabled()) {
-            this.containerLog.fatal(msg);
+        if (this.getContainer().getLogger().isFatalEnabled()) {
+            this.getContainer().getLogger().fatal(msg);
         }
     }
 }

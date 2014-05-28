@@ -61,7 +61,7 @@ public class TimeOutValve extends DelayValve {
     @Override
     public void invoke(Request request, Response response)
             throws IOException, ServletException {
-        this.sleep(delay);
+        this.delayProcessing(delay);
         response.sendError(HttpServletResponse.SC_GATEWAY_TIMEOUT);
     }
 }

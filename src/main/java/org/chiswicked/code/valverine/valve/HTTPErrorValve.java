@@ -34,7 +34,7 @@ import java.io.IOException;
 
 
 /**
- * <b>HTTPErrorValve</b> interrupts request processing and throws a specified HTTP error back to the client
+ * Interrupts request processing and throws a specified HTTP error back to the client
  *
  * @author Norbert Metz
  */
@@ -51,8 +51,6 @@ public class HTTPErrorValve extends TamperValve {
      */
     @Override
     public void invoke(Request request, Response response) throws IOException, ServletException {
-
         response.sendError(HttpServletResponse.SC_NOT_FOUND);
-
     }
 }
