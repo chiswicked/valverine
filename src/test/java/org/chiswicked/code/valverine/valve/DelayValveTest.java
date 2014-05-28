@@ -15,18 +15,13 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 public class DelayValveTest {
-    private TerminatorValve terminatorValve;
-    private DelayValve delayValve;
+    private static TerminatorValve terminatorValve;
     private Request requestMock;
     private Response responseMock;
 
     @Before
     public void setUp() throws Exception {
         terminatorValve = mock(TerminatorValve.class);
-        delayValve = new DelayValve();
-        delayValve.setContainer(new StandardEngine());
-        delayValve.setNext(terminatorValve);
-
         requestMock = mock(Request.class);
         responseMock = mock(Response.class);
     }
@@ -39,7 +34,7 @@ public class DelayValveTest {
     @Test
     public void testInvokeBelowMinDelay5000() throws Exception {
 
-        int elapsedTime = doDelayedRequest(delayValve, -5000);
+        int elapsedTime = doDelayedRequest(DelayValveFactory.getDelayValve(), -5000);
 
         assertTrue(elapsedTime >= 0 && elapsedTime < 100);
     }
@@ -47,7 +42,7 @@ public class DelayValveTest {
     @Test
     public void testInvokeBelowMinDelay1000() throws Exception {
 
-        int elapsedTime = doDelayedRequest(delayValve, -1000);
+        int elapsedTime = doDelayedRequest(DelayValveFactory.getDelayValve(), -1000);
 
         assertTrue(elapsedTime >= 0 && elapsedTime < 100);
     }
@@ -55,7 +50,7 @@ public class DelayValveTest {
     @Test
     public void testInvokeBelowMinDelay1() throws Exception {
 
-        int elapsedTime = doDelayedRequest(delayValve, -1);
+        int elapsedTime = doDelayedRequest(DelayValveFactory.getDelayValve(), -1);
 
         assertTrue(elapsedTime >= 0 && elapsedTime < 100);
     }
@@ -63,7 +58,7 @@ public class DelayValveTest {
     @Test
     public void testInvokeWithinRange0() throws Exception {
 
-        int elapsedTime = doDelayedRequest(delayValve, 0);
+        int elapsedTime = doDelayedRequest(DelayValveFactory.getDelayValve(), 0);
 
         assertTrue(elapsedTime >= 0 && elapsedTime < 100);
     }
@@ -71,7 +66,7 @@ public class DelayValveTest {
     @Test
     public void testInvokeWithinRange100() throws Exception {
 
-        int elapsedTime = doDelayedRequest(delayValve, 100);
+        int elapsedTime = doDelayedRequest(DelayValveFactory.getDelayValve(), 100);
 
         assertTrue(elapsedTime >= 50 && elapsedTime < 150);
     }
@@ -79,16 +74,16 @@ public class DelayValveTest {
     @Test
     public void testInvokeWithinRange1000() throws Exception {
 
-        int elapsedTime = doDelayedRequest(delayValve, 1000);
+        int elapsedTime = doDelayedRequest(DelayValveFactory.getDelayValve(), 1000);
 
         assertTrue(elapsedTime >= 950 && elapsedTime < 1050);
     }
 
     @Test
     public void testInvokeAboveMaxDelay31000() throws Exception {
-        int elapsedTime = doDelayedRequest(delayValve, 1000);
+        int elapsedTime = doDelayedRequest(DelayValveFactory.getDelayValve(), 31000);
 
-        assertTrue(elapsedTime >= 950 && elapsedTime < 1050);
+        assertTrue(elapsedTime >= 29950 && elapsedTime < 30050);
     }
 
 
@@ -104,11 +99,20 @@ public class DelayValveTest {
         return (int) (endTime - startTime);
     }
 
+    private static class DelayValveFactory {
+        public static DelayValve getDelayValve() {
+            DelayValve delayValve = new DelayValve();
+            delayValve.setContainer(new StandardEngine());
+            delayValve.setNext(terminatorValve);
+            return delayValve;
+        }
+    }
+
     private class TerminatorValve extends ValveBase {
 
         @Override
         public void invoke(Request request, Response response) throws IOException, ServletException {
-
+            // Do nothing, that way terminate processing
         }
     }
 }
