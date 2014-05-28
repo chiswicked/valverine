@@ -1,5 +1,6 @@
 # Valverine
 #### Java Servlet Container Test Tools
+[![Build Status](https://travis-ci.org/chiswicked/valverine.svg?branch=master)](https://travis-ci.org/chiswicked/valverine)
 ---
 ## GOAL
 
