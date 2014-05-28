@@ -44,10 +44,10 @@ import java.io.IOException;
  */
 public class DelayValve extends TamperValve {
 
-
-    // Default length of delay in milliseconds
-    private int delay = 2000;
-
+    public static final int MIN_DELAY = 0;
+    public static final int DEFAULT_DELAY = 2000;
+    private int delay = DEFAULT_DELAY;
+    public static final int MAX_DELAY = 30000;
 
     /**
      * Delay request processing
@@ -72,12 +72,12 @@ public class DelayValve extends TamperValve {
      * @param delay Length of delay in milliseconds (min 0, max 30000)
      */
     public synchronized void setDelay(int delay) {
-        if (delay > 30000) {
-            this.delay = 30000;
-        } else if (delay > 0) {
+        if (delay > DelayValve.MAX_DELAY) {
+            this.delay = DelayValve.MAX_DELAY;
+        } else if (delay > DelayValve.MIN_DELAY) {
             this.delay = delay;
         } else {
-            this.delay = 0;
+            this.delay = DelayValve.MIN_DELAY;
         }
     }
 }
