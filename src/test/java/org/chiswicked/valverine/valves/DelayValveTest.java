@@ -24,7 +24,7 @@ public class DelayValveTest extends TamperValveTest {
 
         int elapsedTime = doDelayedRequest((DelayValve) getConcrete(), -1000);
 
-        assertTrue("<Valve delay=\"-1000\" /> should be delayed by 0; processing took " + elapsedTime, elapsedTime >= 0 && elapsedTime < 150);
+        assertTrue("<Valve delay=\"-1000\" /> should be delayed by 0; processing took " + elapsedTime, elapsedTime >= 0 && elapsedTime < 250);
     }
 
     @Test
@@ -32,7 +32,7 @@ public class DelayValveTest extends TamperValveTest {
 
         int elapsedTime = doDelayedRequest((DelayValve) getConcrete(), -1);
 
-        assertTrue("<Valve delay=\"-1\" /> should be delayed by 0; processing took " + elapsedTime, elapsedTime >= 0 && elapsedTime < 150);
+        assertTrue("<Valve delay=\"-1\" /> should be delayed by 0; processing took " + elapsedTime, elapsedTime >= 0 && elapsedTime < 250);
     }
 
     @Test
@@ -40,7 +40,7 @@ public class DelayValveTest extends TamperValveTest {
 
         int elapsedTime = doDelayedRequest((DelayValve) getConcrete(), 0);
 
-        assertTrue("<Valve delay=\"0\" /> should be delayed by 0; processing took " + elapsedTime, elapsedTime >= 0 && elapsedTime < 150);
+        assertTrue("<Valve delay=\"0\" /> should be delayed by 0; processing took " + elapsedTime, elapsedTime >= 0 && elapsedTime < 250);
     }
 
     @Test
@@ -48,7 +48,7 @@ public class DelayValveTest extends TamperValveTest {
 
         int elapsedTime = doDelayedRequest((DelayValve) getConcrete(), 0);
 
-        assertTrue("<Valve /> should be delayed by 0; processing took " + elapsedTime, elapsedTime >= 0 && elapsedTime < 150);
+        assertTrue("<Valve /> should be delayed by 0; processing took " + elapsedTime, elapsedTime >= 0 && elapsedTime < 250);
     }
 
     @Test
@@ -56,7 +56,7 @@ public class DelayValveTest extends TamperValveTest {
 
         int elapsedTime = doDelayedRequest((DelayValve) getConcrete(), 100);
 
-        assertTrue("<Valve delay=\"100\" /> should be delayed by 100; processing took " + elapsedTime, elapsedTime >= 75 && elapsedTime < 250);
+        assertTrue("<Valve delay=\"100\" /> should be delayed by 100; processing took " + elapsedTime, elapsedTime >= 75 && elapsedTime < 350);
     }
 
     @Test
@@ -64,14 +64,14 @@ public class DelayValveTest extends TamperValveTest {
 
         int elapsedTime = doDelayedRequest((DelayValve) getConcrete(), 1000);
 
-        assertTrue("<Valve delay=\"1000\" /> should be delayed by 1000; processing took " + elapsedTime, elapsedTime >= 975 && elapsedTime < 1150);
+        assertTrue("<Valve delay=\"1000\" /> should be delayed by 1000; processing took " + elapsedTime, elapsedTime >= 975 && elapsedTime < 1250);
     }
 
     @Test
     public void testInvokeAboveMaxDelay31000() throws Exception {
         int elapsedTime = doDelayedRequest((DelayValve) getConcrete(), 31000);
 
-        assertTrue("<Valve delay=\"31000\" /> should be delayed by 30000; processing took " + elapsedTime, elapsedTime >= 29975 && elapsedTime < 30150);
+        assertTrue("<Valve delay=\"31000\" /> should be delayed by 30000; processing took " + elapsedTime, elapsedTime >= 29975 && elapsedTime < 30250);
     }
 
 
