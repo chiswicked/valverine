@@ -32,19 +32,11 @@ public class DelayValveTest {
     }
 
     @Test
-    public void testInvokeBelowMinDelay5000() throws Exception {
-
-        int elapsedTime = doDelayedRequest(DelayValveFactory.getDelayValve(), -5000);
-
-        assertTrue(elapsedTime >= 0 && elapsedTime < 100);
-    }
-
-    @Test
     public void testInvokeBelowMinDelay1000() throws Exception {
 
         int elapsedTime = doDelayedRequest(DelayValveFactory.getDelayValve(), -1000);
 
-        assertTrue(elapsedTime >= 0 && elapsedTime < 100);
+        assertTrue("<Valve delay=\"-1000\" /> should be delayed by 0; processing took ", elapsedTime >= 0 && elapsedTime < 100);
     }
 
     @Test
@@ -52,7 +44,7 @@ public class DelayValveTest {
 
         int elapsedTime = doDelayedRequest(DelayValveFactory.getDelayValve(), -1);
 
-        assertTrue(elapsedTime >= 0 && elapsedTime < 100);
+        assertTrue("<Valve delay=\"-1\" /> should be delayed by 0; processing took ", elapsedTime >= 0 && elapsedTime < 100);
     }
 
     @Test
@@ -60,7 +52,15 @@ public class DelayValveTest {
 
         int elapsedTime = doDelayedRequest(DelayValveFactory.getDelayValve(), 0);
 
-        assertTrue(elapsedTime >= 0 && elapsedTime < 100);
+        assertTrue("<Valve delay=\"0\" /> should be delayed by 0; processing took ", elapsedTime >= 0 && elapsedTime < 100);
+    }
+
+    @Test
+    public void testInvokeWithinRange() throws Exception {
+
+        int elapsedTime = doDelayedRequest(DelayValveFactory.getDelayValve(), 0);
+
+        assertTrue("<Valve /> should be delayed by 0; processing took ", elapsedTime >= 0 && elapsedTime < 100);
     }
 
     @Test
@@ -68,7 +68,7 @@ public class DelayValveTest {
 
         int elapsedTime = doDelayedRequest(DelayValveFactory.getDelayValve(), 100);
 
-        assertTrue(elapsedTime >= 50 && elapsedTime < 150);
+        assertTrue("<Valve delay=\"100\" /> should be delayed by 100; processing took ", elapsedTime >= 50 && elapsedTime < 150);
     }
 
     @Test
@@ -76,20 +76,18 @@ public class DelayValveTest {
 
         int elapsedTime = doDelayedRequest(DelayValveFactory.getDelayValve(), 1000);
 
-        assertTrue(elapsedTime >= 950 && elapsedTime < 1050);
+        assertTrue("<Valve delay=\"1000\" /> should be delayed by 1000; processing took ", elapsedTime >= 950 && elapsedTime < 1050);
     }
 
     @Test
     public void testInvokeAboveMaxDelay31000() throws Exception {
         int elapsedTime = doDelayedRequest(DelayValveFactory.getDelayValve(), 31000);
 
-        assertTrue(elapsedTime >= 29950 && elapsedTime < 30050);
+        assertTrue("<Valve delay=\"31000\" /> should be delayed by 30000; processing took ", elapsedTime >= 29950 && elapsedTime < 30050);
     }
 
 
-    private int doDelayedRequest(DelayValve valveToTestWith, int delay) throws Exception {
-        valveToTestWith.setDelay(delay);
-
+    private int doDelayedRequest(DelayValve valveToTestWith) throws Exception {
         long startTime = System.currentTimeMillis();
 
         valveToTestWith.invoke(requestMock, responseMock);
@@ -97,6 +95,12 @@ public class DelayValveTest {
         long endTime = System.currentTimeMillis();
 
         return (int) (endTime - startTime);
+    }
+
+    private int doDelayedRequest(DelayValve valveToTestWith, int delay) throws Exception {
+        valveToTestWith.setDelay(delay);
+
+        return doDelayedRequest(valveToTestWith);
     }
 
     private static class DelayValveFactory {
