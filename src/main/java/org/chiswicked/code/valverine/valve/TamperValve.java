@@ -80,9 +80,16 @@ public abstract class TamperValve extends ValveBase {
      * @param msg Message to be logged
      */
     protected void info(String msg) {
-        if (this.containerLog.isInfoEnabled()) {
-            this.containerLog.info(msg);
+        if (this.getContainer().getLogger().isInfoEnabled()) {
+            this.getContainer().getLogger().info(msg);
         }
+
+//        For some reason this.containerLog throws java.lang.NullPointerException in unit tests
+//        For some reason this.getContainer().getLogger() does not, so using that instead
+
+//        if (this.containerLog.isInfoEnabled()) {
+//            this.containerLog.info(msg);
+//        }
     }
 
 
