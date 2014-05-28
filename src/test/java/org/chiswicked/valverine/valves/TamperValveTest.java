@@ -1,9 +1,8 @@
-package org.chiswicked.code.valverine.valve;
+package org.chiswicked.valverine.valves;
 
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 import org.apache.catalina.valves.ValveBase;
-import org.chiswicked.valverine.valves.TamperValve;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

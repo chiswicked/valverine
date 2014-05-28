@@ -1,8 +1,6 @@
-package org.chiswicked.code.valverine.valve;
+package org.chiswicked.valverine.valves;
 
 import org.apache.catalina.core.StandardEngine;
-import org.chiswicked.valverine.valves.HTTPErrorValve;
-import org.chiswicked.valverine.valves.TamperValve;
 import org.junit.After;
 import org.junit.Before;
 
