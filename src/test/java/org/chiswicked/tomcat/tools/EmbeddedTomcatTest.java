@@ -8,6 +8,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 public class EmbeddedTomcatTest {
     public static final String TEMP_DIR = System.getProperty("java.io.tmpdir");
     private static Tomcat tomcat;
@@ -32,7 +37,7 @@ public class EmbeddedTomcatTest {
     public void setUp() throws Exception {
         tomcat = new Tomcat();
         tomcat.setBaseDir(System.getProperty("java.io.tmpdir"));
-        tomcat.setPort(0);
+        tomcat.setPort(9999);
         tomcat.getHost().setAppBase(System.getProperty("java.io.tmpdir"));
         //    tomcat.getHost().setAutoDeploy(true);
         //    tomcat.getHost().setDeployOnStartup(true);
@@ -40,28 +45,26 @@ public class EmbeddedTomcatTest {
         tomcat.init();
         tomcat.start();
 
-        /* tomcat.getConnector().
+        Thread.sleep(100000);
+        URL url = new URL("http://localhost:9999/");//" + getPort() + "/");
 
-       URL url = new URL("http://localhost:" + getPort() + "/");
+        HttpURLConnection connection = null;
 
-        URLConnection conn = null;
+        connection = (HttpURLConnection) url.openConnection();
+        connection.setUseCaches(false);
+        connection.setReadTimeout(1000);
+        connection.setRequestMethod("GET");
 
-        try {
-            conn = url.openConnection();
-        }   catch (Exception e) {
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
-        }
-
-        try {
-            InputStream is = conn.getInputStream();
-        }   catch (Exception e) {
-
-        }
-
+        String inputLine;
+        while ((inputLine = in.readLine()) != null)
+            System.out.println(inputLine);
+        in.close();
         //  Response response = tomcat.getConnector().createResponse();
-       // response.setStatus(404);
+        // response.setStatus(404);
 
-      //  Assert.assertEquals(response.getStatus(), 404);*/
+        //  Assert.assertEquals(response.getStatus(), 404);*/
     }
 
     @Test
