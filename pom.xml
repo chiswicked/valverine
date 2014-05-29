@@ -24,6 +24,11 @@
         </developer>
     </developers>
 
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/chiswicked/valverine/issues</url>
+    </issueManagement>
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
