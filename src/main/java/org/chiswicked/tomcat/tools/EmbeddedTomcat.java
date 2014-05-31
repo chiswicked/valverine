@@ -91,9 +91,9 @@ public final class EmbeddedTomcat {
         try {
             url = new URL(urlString);
         } catch (MalformedURLException e) {
-            System.err.println("Embedded Tomcat instance failed to load. Invalid URL: " + urlString);
-            e.printStackTrace();
+            tomcat.getEngine().getLogger().fatal("Embedded Tomcat instance failed to load. Invalid URL: " + urlString);
         }
+
         tomcat.getEngine().getLogger().info("Listening on " + urlString);
     }
 
