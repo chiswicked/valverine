@@ -144,6 +144,76 @@ public final class EmbeddedTomcat {
 
 
     /**
+     * Sends a HEAD request to the server
+     *
+     * @param timeout Request timeout
+     * @return Server response
+     * @throws Exception
+     */
+    public String sendHead(int timeout)
+            throws Exception {
+        // TODO Implement more user-friendly error handling mechanism
+        return this.sendMethod("HEAD", timeout);
+    }
+
+
+    /**
+     * Sends a OPTIONS request to the server
+     *
+     * @param timeout Request timeout
+     * @return Server response
+     * @throws Exception
+     */
+    public String sendOptions(int timeout)
+            throws Exception {
+        // TODO Implement more user-friendly error handling mechanism
+        return this.sendMethod("OPTIONS", timeout);
+    }
+
+
+    /**
+     * Sends a PUT request to the server
+     *
+     * @param timeout Request timeout
+     * @return Server response
+     * @throws Exception
+     */
+    public String sendPut(int timeout)
+            throws Exception {
+        // TODO Implement more user-friendly error handling mechanism
+        return this.sendMethod("PUT", timeout);
+    }
+
+
+    /**
+     * Sends a DELETE request to the server
+     *
+     * @param timeout Request timeout
+     * @return Server response
+     * @throws Exception
+     */
+    public String sendDelete(int timeout)
+            throws Exception {
+        // TODO Implement more user-friendly error handling mechanism
+        return this.sendMethod("DELETE", timeout);
+    }
+
+
+    /**
+     * Sends a TRACE request to the server
+     *
+     * @param timeout Request timeout
+     * @return Server response
+     * @throws Exception
+     */
+    public String sendTrace(int timeout)
+            throws Exception {
+        // TODO Implement more user-friendly error handling mechanism
+        return this.sendMethod("TRACE", timeout);
+    }
+
+
+    /**
      * Sends an HTTP request to the server
      *
      * @param method HTTP method to use
@@ -171,24 +241,36 @@ public final class EmbeddedTomcat {
 
         long startTime = System.currentTimeMillis();
 
-        // Read response
-        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-
         String inputLine;
         StringBuilder response = new StringBuilder();
 
-        while ((inputLine = in.readLine()) != null) {
-            System.out.println(inputLine);
-            response.append(inputLine);
+        // Read response
+        try {
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+            while ((inputLine = in.readLine()) != null) {
+                System.out.println(inputLine);
+                response.append(inputLine);
+            }
+            in.close();
+
+        } catch (Exception e) {
+            tomcat.getEngine().getLogger().info("Read error: " + e.getMessage());
         }
-        in.close();
 
-        long endTime = System.currentTimeMillis();
 
-        // Log response time
-        tomcat.getEngine().getLogger().info("Millis: " + (int) (endTime - startTime));
+        if (connection.getResponseCode() < 400) {
 
-        return response.toString();
+            long endTime = System.currentTimeMillis();
+            long elapsedTime = endTime - startTime;
+
+            // Log response time
+            tomcat.getEngine().getLogger().info("Millis: " + elapsedTime);
+
+            return "Processed " + response.toString() + " in " + elapsedTime + "ms";
+        } else {
+            return connection.getResponseCode() + " error";
+        }
     }
 
 
@@ -226,6 +308,7 @@ public final class EmbeddedTomcat {
         return port;
     }
 
+
     /**
      * Embedded servlet for default setup
      */
@@ -247,7 +330,7 @@ public final class EmbeddedTomcat {
 
             res.setContentType("plain/text");
 
-            out.write((req.getMethod() + " request received from " + req.getRemoteAddr() + "\n").getBytes());
+            out.write((req.getMethod() + " request from " + req.getRemoteAddr() + "\n").getBytes());
             out.flush();
             out.close();
         }
