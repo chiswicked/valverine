@@ -58,7 +58,7 @@ public abstract class TamperValve extends ValveBase {
 
 
     /**
-     * Create <b>trace</b> level log entry, if enabled by container
+     * Create <i>TRACE</i> level log entry, if enabled by container
      *
      * @param msg Message to be logged
      */
@@ -71,7 +71,7 @@ public abstract class TamperValve extends ValveBase {
 
 
     /**
-     * Create <b>debug</b> level log entry, if enabled by container
+     * Create <i>DEBUG</i> level log entry, if enabled by container
      *
      * @param msg Message to be logged
      */
@@ -84,7 +84,7 @@ public abstract class TamperValve extends ValveBase {
 
 
     /**
-     * Create <b>info</b> level log entry, if enabled by container
+     * Create <i>INFO</i> level log entry, if enabled by container
      *
      * @param msg Message to be logged
      */
@@ -97,7 +97,7 @@ public abstract class TamperValve extends ValveBase {
 
 
     /**
-     * Create <b>warn</b> level log entry, if enabled by container
+     * Create <i>WARN</i> level log entry, if enabled by container
      *
      * @param msg Message to be logged
      */
@@ -110,7 +110,7 @@ public abstract class TamperValve extends ValveBase {
 
 
     /**
-     * Create <b>erro</b> level log entry, if enabled by container
+     * Create <i>ERROR</i> level log entry, if enabled by container
      *
      * @param msg Message to be logged
      */
@@ -123,7 +123,7 @@ public abstract class TamperValve extends ValveBase {
 
 
     /**
-     * Create <b>fatal</b> level log entry, if enabled by container
+     * Create <i>FATAL</i> level log entry, if enabled by container
      *
      * @param msg Message to be logged
      */
