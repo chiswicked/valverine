@@ -43,7 +43,7 @@ public abstract class TamperValve extends ValveBase {
     protected void delayProcessing(int time) {
         try {
             Thread.sleep(time);
-            this.info(String.format("Request processing delayed by %s milliseconds", time));
+            this.debug(String.format("Request processing delayed by %s milliseconds", time));
         } catch (InterruptedException ie) {
             this.error("Interrupted while sleeping for " + time + " milliseconds");
         }
@@ -51,20 +51,19 @@ public abstract class TamperValve extends ValveBase {
 
 
     /*
-    For some reason this.containerLog throws java.lang.NullPointerException in unit tests
-    For some reason this.getContainer().getLogger() does not, so using that instead
-    TODO Look into why this.containerLog throws java.lang.NullPointerException in unit tests
+    When a Valve is not assigned to a container, it cannot log as the logger is accessed via the container
+    TODO Silently dropping logging may be dangerous
     */
 
 
     /**
-     * Create <i>TRACE</i> level log entry, if enabled by container
+     * Create <b>TRACE</> level log entry, if enabled by container
      *
      * @param msg Message to be logged
      */
     @SuppressWarnings("unused")
     protected void trace(String msg) {
-        if (this.getContainer().getLogger().isTraceEnabled()) {
+        if (this.getContainer() != null && this.getContainer().getLogger().isTraceEnabled()) {
             this.getContainer().getLogger().trace(msg);
         }
     }
@@ -77,7 +76,7 @@ public abstract class TamperValve extends ValveBase {
      */
     @SuppressWarnings("unused")
     protected void debug(String msg) {
-        if (this.getContainer().getLogger().isDebugEnabled()) {
+        if (this.getContainer() != null && this.getContainer().getLogger().isDebugEnabled()) {
             this.getContainer().getLogger().debug(msg);
         }
     }
@@ -90,7 +89,7 @@ public abstract class TamperValve extends ValveBase {
      */
     @SuppressWarnings("unused")
     protected void info(String msg) {
-        if (this.getContainer().getLogger().isInfoEnabled()) {
+        if (this.getContainer() != null && this.getContainer().getLogger().isInfoEnabled()) {
             this.getContainer().getLogger().info(msg);
         }
     }
@@ -103,7 +102,7 @@ public abstract class TamperValve extends ValveBase {
      */
     @SuppressWarnings("unused")
     protected void warn(String msg) {
-        if (this.getContainer().getLogger().isWarnEnabled()) {
+        if (this.getContainer() != null && this.getContainer().getLogger().isWarnEnabled()) {
             this.getContainer().getLogger().warn(msg);
         }
     }
@@ -116,7 +115,7 @@ public abstract class TamperValve extends ValveBase {
      */
     @SuppressWarnings("unused")
     protected void error(String msg) {
-        if (this.getContainer().getLogger().isErrorEnabled()) {
+        if (this.getContainer() != null && this.getContainer().getLogger().isErrorEnabled()) {
             this.getContainer().getLogger().error(msg);
         }
     }
@@ -129,7 +128,7 @@ public abstract class TamperValve extends ValveBase {
      */
     @SuppressWarnings("unused")
     protected void fatal(String msg) {
-        if (this.getContainer().getLogger().isFatalEnabled()) {
+        if (this.getContainer() != null && this.getContainer().getLogger().isFatalEnabled()) {
             this.getContainer().getLogger().fatal(msg);
         }
     }

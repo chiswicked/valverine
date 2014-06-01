@@ -27,6 +27,7 @@ package org.chiswicked.valverine.valves;
 
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
+import org.chiswicked.valverine.Valverine;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
@@ -46,8 +47,18 @@ import java.io.IOException;
 public class TimeOutValve extends DelayValve {
 
 
-    // Default length of delay in milliseconds
-    private int delay = 15000;
+    /**
+     * Minimum amount of delay (in milliseconds)
+     */
+    public static final int DEFAULT_TIMEOUT_DELAY = 15000;
+
+
+    /**
+     * Initiating default amount of delay
+     */
+    public TimeOutValve() {
+        super.setDelay(DEFAULT_TIMEOUT_DELAY);
+    }
 
 
     /**
@@ -61,7 +72,9 @@ public class TimeOutValve extends DelayValve {
     @Override
     public void invoke(Request request, Response response)
             throws IOException, ServletException {
-        this.delayProcessing(delay);
+        long receivedAt = System.currentTimeMillis();
+        Valverine.addHeader(request, Valverine.HTTP_HEADER_RECEIVED, String.valueOf(receivedAt)).getHeader(Valverine.HTTP_HEADER_RECEIVED);
+        this.delayProcessing(getDelay());
         response.sendError(HttpServletResponse.SC_GATEWAY_TIMEOUT);
     }
 }

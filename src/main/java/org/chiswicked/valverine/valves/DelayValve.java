@@ -22,11 +22,11 @@
  * SOFTWARE.
  */
 
-
 package org.chiswicked.valverine.valves;
 
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
+import org.chiswicked.valverine.Valverine;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
@@ -52,17 +52,30 @@ public class DelayValve extends TamperValve {
 
 
     /**
-     * Minimum amount of delay (in milliseconds)
+     * Default amount of delay (in milliseconds)
      */
     public static final int DEFAULT_DELAY = 2000;
+
+
+    /**
+     * Maximum amount of delay (in milliseconds)
+     */
+    public static final int MAX_DELAY = 20000;
+
+
+    /**
+     * Actual amount of delay
+     */
+    private static int delay;
+
+
     /**
      * Initiating default amount of delay
      */
-    private int delay = DelayValve.DEFAULT_DELAY;
-    /**
-     * Minimum amount of delay (in milliseconds)
-     */
-    public static final int MAX_DELAY = 30000;
+    public DelayValve() {
+        setDelay(DEFAULT_DELAY);
+    }
+
 
     /**
      * Delay request processing
@@ -75,13 +88,23 @@ public class DelayValve extends TamperValve {
     @Override
     public void invoke(Request request, Response response)
             throws IOException, ServletException {
-        this.delayProcessing(delay);
-        getNext().invoke(request, response);
+        long receivedAt = System.currentTimeMillis();
+        this.delayProcessing(getDelay());
+        getNext().invoke(Valverine.addHeader(request, Valverine.HTTP_HEADER_RECEIVED, String.valueOf(receivedAt)), response);
     }
 
+    /**
+     * Returns the amount of delay set for the valve to impose on request processing
+     *
+     * @return Amount of delay
+     */
+    protected synchronized int getDelay() {
+        return delay;
+    }
 
     /**
-     * <p>Set the length of delay. Invoked automatically if {@code delay} attribute is set in the {@code <Valve>} node,
+     * <p>Set the length of delay. Invoked automatically by the application container if
+     * {@code delay} attribute is set in the {@code <Valve>} node,
      * otherwise the default 2000 milliseconds is used</p>
      *
      * @param delay Length of delay in milliseconds (min 0, max 30000)

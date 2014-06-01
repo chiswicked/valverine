@@ -22,14 +22,15 @@
  * SOFTWARE.
  */
 
-
 package org.chiswicked.tomcat.tools;
 
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.LifecycleState;
+import org.apache.catalina.Valve;
 import org.apache.catalina.servlets.DefaultServlet;
 import org.apache.catalina.startup.Tomcat;
+import org.chiswicked.valverine.Valverine;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
@@ -42,15 +43,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 
 
+/**
+ * Embedded Tomcat
+ */
 public final class EmbeddedTomcat {
     private static final String TEMP_DIR = System.getProperty("java.io.tmpdir");
     private Tomcat tomcat;
     private String urlString;
     private URL url;
-    private boolean isServletSet;
 
 
     /**
@@ -65,14 +69,38 @@ public final class EmbeddedTomcat {
 
 
     /**
-     * <p>Initialises server instance with given servlet</p>
+     * <p>Initialises server instance with given servlet. Default valves are used</p>
      *
      * @param servlet Servlet to initialise tomcat with
      * @throws Exception
      */
     public EmbeddedTomcat(Servlet servlet)
             throws Exception {
-        initialize(servlet);
+        initialize(servlet, null);
+    }
+
+
+    /**
+     * <p>Initialises server instance with given valve (chained to default pipeline). Default servlet is used </p>
+     *
+     * @param valve Valve to initialise tomcat with
+     * @throws Exception
+     */
+    public EmbeddedTomcat(Valve valve)
+            throws Exception {
+        initialize(new EmbeddedTestServlet(), valve);
+    }
+
+
+    /**
+     * <p>Initialises server instance with given servlet and valve</p>
+     *
+     * @param servlet Servlet to initialise tomcat with
+     * @throws Exception
+     */
+    public EmbeddedTomcat(Servlet servlet, Valve valve)
+            throws Exception {
+        initialize(servlet, valve);
     }
 
 
@@ -114,6 +142,28 @@ public final class EmbeddedTomcat {
         }
     }
 
+    /**
+     * Adds a custom valve to the Engine's pipeline
+     *
+     * @param valve Valve to add to the pipeline
+     */
+    public void addValvetoEngine(Valve valve) {
+        tomcat.getEngine().getPipeline().addValve(valve);
+    }
+
+
+    /**
+     * Sends a GET request to the server
+     *
+     * @return Server response
+     * @throws Exception
+     */
+    public HttpResponse sendGet()
+            throws Exception {
+        // TODO Implement more user-friendly error handling mechanism
+        return this.sendMethod("GET", 0);
+    }
+
 
     /**
      * Sends a GET request to the server
@@ -122,10 +172,23 @@ public final class EmbeddedTomcat {
      * @return Server response
      * @throws Exception
      */
-    public String sendGet(int timeout)
+    public HttpResponse sendGet(int timeout)
             throws Exception {
         // TODO Implement more user-friendly error handling mechanism
         return this.sendMethod("GET", timeout);
+    }
+
+
+    /**
+     * Sends a POST request to the server
+     *
+     * @return Server response
+     * @throws Exception
+     */
+    public HttpResponse sendPost()
+            throws Exception {
+        // TODO Implement more user-friendly error handling mechanism
+        return this.sendMethod("POST", 0);
     }
 
 
@@ -136,10 +199,23 @@ public final class EmbeddedTomcat {
      * @return Server response
      * @throws Exception
      */
-    public String sendPost(int timeout)
+    public HttpResponse sendPost(int timeout)
             throws Exception {
         // TODO Implement more user-friendly error handling mechanism
         return this.sendMethod("POST", timeout);
+    }
+
+
+    /**
+     * Sends a HEAD request to the server
+     *
+     * @return Server response
+     * @throws Exception
+     */
+    public HttpResponse sendHead()
+            throws Exception {
+        // TODO Implement more user-friendly error handling mechanism
+        return this.sendMethod("HEAD", 0);
     }
 
 
@@ -150,10 +226,23 @@ public final class EmbeddedTomcat {
      * @return Server response
      * @throws Exception
      */
-    public String sendHead(int timeout)
+    public HttpResponse sendHead(int timeout)
             throws Exception {
         // TODO Implement more user-friendly error handling mechanism
         return this.sendMethod("HEAD", timeout);
+    }
+
+
+    /**
+     * Sends a OPTIONS request to the server
+     *
+     * @return Server response
+     * @throws Exception
+     */
+    public HttpResponse sendOptions()
+            throws Exception {
+        // TODO Implement more user-friendly error handling mechanism
+        return this.sendMethod("OPTIONS", 0);
     }
 
 
@@ -164,10 +253,23 @@ public final class EmbeddedTomcat {
      * @return Server response
      * @throws Exception
      */
-    public String sendOptions(int timeout)
+    public HttpResponse sendOptions(int timeout)
             throws Exception {
         // TODO Implement more user-friendly error handling mechanism
         return this.sendMethod("OPTIONS", timeout);
+    }
+
+
+    /**
+     * Sends a PUT request to the server
+     *
+     * @return Server response
+     * @throws Exception
+     */
+    public HttpResponse sendPut()
+            throws Exception {
+        // TODO Implement more user-friendly error handling mechanism
+        return this.sendMethod("PUT", 0);
     }
 
 
@@ -178,10 +280,23 @@ public final class EmbeddedTomcat {
      * @return Server response
      * @throws Exception
      */
-    public String sendPut(int timeout)
+    public HttpResponse sendPut(int timeout)
             throws Exception {
         // TODO Implement more user-friendly error handling mechanism
         return this.sendMethod("PUT", timeout);
+    }
+
+
+    /**
+     * Sends a DELETE request to the server
+     *
+     * @return Server response
+     * @throws Exception
+     */
+    public HttpResponse sendDelete()
+            throws Exception {
+        // TODO Implement more user-friendly error handling mechanism
+        return this.sendMethod("DELETE", 0);
     }
 
 
@@ -192,7 +307,7 @@ public final class EmbeddedTomcat {
      * @return Server response
      * @throws Exception
      */
-    public String sendDelete(int timeout)
+    public HttpResponse sendDelete(int timeout)
             throws Exception {
         // TODO Implement more user-friendly error handling mechanism
         return this.sendMethod("DELETE", timeout);
@@ -202,34 +317,30 @@ public final class EmbeddedTomcat {
     /**
      * Sends a TRACE request to the server
      *
+     * @return Server response
+     * @throws Exception
+     */
+    public HttpResponse sendTrace()
+            throws Exception {
+        // TODO Implement more user-friendly error handling mechanism
+        return this.sendMethod("TRACE", 0);
+    }
+
+    /**
+     * Sends a TRACE request to the server
+     *
      * @param timeout Request timeout
      * @return Server response
      * @throws Exception
      */
-    public String sendTrace(int timeout)
+    public HttpResponse sendTrace(int timeout)
             throws Exception {
         // TODO Implement more user-friendly error handling mechanism
         return this.sendMethod("TRACE", timeout);
     }
 
 
-    /**
-     * Sends an HTTP request to the server
-     *
-     * @param method HTTP method to use
-     * @return Server response
-     * @throws Exception
-     */
-    @SuppressWarnings("unused")
-    private String sendMethod(String method)
-            throws Exception {
-        // TODO Implement more user-friendly error handling mechanism
-        return this.sendMethod(method, 0);
-    }
-
-
-    private String sendMethod(String method, int timeout)
-            throws Exception {
+    private HttpResponse sendMethod(String method, int timeout) throws IOException {
         // TODO Implement more user-friendly error handling mechanism
 
         // Set up connection to tomcat test instance
@@ -237,61 +348,47 @@ public final class EmbeddedTomcat {
 
         connection.setUseCaches(false);
         connection.setReadTimeout(timeout);
-        connection.setRequestMethod(method);
 
-        long startTime = System.currentTimeMillis();
+        try {
+            connection.setRequestMethod(method);
+        } catch (ProtocolException pe) {
+            try {
+                connection.setRequestMethod("GET");
+            } catch (ProtocolException peg) {
+                tomcat.getEngine().getLogger().error(peg.getMessage());
+                // TODO Possibly we want to terminate processing here
+            }
+        }
+
+        // Send request and read response
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+        HttpHeader header = new HttpHeader(connection.getHeaderFields());
 
         String inputLine;
         StringBuilder response = new StringBuilder();
 
-        // Read response
-        try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-
-            while ((inputLine = in.readLine()) != null) {
-                System.out.println(inputLine);
-                response.append(inputLine);
-            }
-            in.close();
-
-        } catch (Exception e) {
-            tomcat.getEngine().getLogger().info("Read error: " + e.getMessage());
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
         }
+        in.close();
 
-
-        if (connection.getResponseCode() < 400) {
-
-            long endTime = System.currentTimeMillis();
-            long elapsedTime = endTime - startTime;
-
-            // Log response time
-            tomcat.getEngine().getLogger().info("Millis: " + elapsedTime);
-
-            return "Processed " + response.toString() + " in " + elapsedTime + "ms";
-        } else {
-            return connection.getResponseCode() + " error";
-        }
+        return new HttpResponse(header, response.toString());
     }
 
 
-    private void initialize(Servlet servlet)
-            throws Exception {
-        // TODO Implement more user-friendly exception mechanism
+    private void initialize(Servlet servlet, Valve valve) {
+        // Init tomcat
         tomcat = new Tomcat();
         tomcat.setPort(0);
         tomcat.setBaseDir(TEMP_DIR);
         tomcat.getHost().setAppBase(TEMP_DIR);
 
-        if (!isServletSet) {
-            File docBase = new File(TEMP_DIR);
-            Context ctx = tomcat.addContext("", docBase.getAbsolutePath());
-            Tomcat.addServlet(ctx, "test", servlet);
-            ctx.addServletMapping("/*", "test");
-            isServletSet = true;
-        } else {
-            // TODO Implement more user-friendly exception mechanism
-            throw new Exception("Servlet is already set");
-        }
+        // Init servlet
+        File docBase = new File(TEMP_DIR);
+        Context ctx = tomcat.addContext("", docBase.getAbsolutePath());
+        Tomcat.addServlet(ctx, "test", servlet);
+        ctx.addServletMapping("/*", "test");
     }
 
 
@@ -299,11 +396,13 @@ public final class EmbeddedTomcat {
      * Returns the TCP port allocated to the server upon initialisation
      *
      * @return Port allocated to tomcat instance upon initialisation
+     * @throws org.apache.catalina.LifecycleException
      */
-    private int getPort() {
-        // TODO Implement more user-friendly error handling mechanism
+    private int getPort() throws LifecycleException {
         int port = tomcat.getConnector().getLocalPort();
-        if (port <= 0) System.err.println("Tomcat server must be started before retrieving allocated TCP port");
+        if (port <= 0) {
+            throw new LifecycleException("Cannot retrieve local port before the server is started");
+        }
 
         return port;
     }
@@ -316,8 +415,13 @@ public final class EmbeddedTomcat {
 
 
         /**
-         * <p>Default Servlet to initialise EmbeddedTomcat with if no constructor argument is specified</p>
-         * <p>In the HTTP response, it returns the request method and the requestor's remote address in {@code plain/text}</p>
+         * <p>Default Servlet to initialise #EmbeddedTomcat with if no constructor argument is specified</p>
+         * <p>In the HTTP response header, it returns the request method and the requestor's remote address in {@code plain/text}</p>
+         * <ul>
+         * <li>{@code Valverine-Method: POST}</li>
+         * <li>{@code Valverine-Processed: 234}</li>
+         * </ul>
+         * <p>In the HTTP response body, it returns fully qualified name of Valverine e.g {@code Valverine/1.0}</p>
          *
          * @param req HTTP request
          * @param res HTTP response
@@ -326,11 +430,43 @@ public final class EmbeddedTomcat {
          */
         private void doMethod(HttpServletRequest req, HttpServletResponse res)
                 throws ServletException, IOException {
+
+//          DEBUGGING
+/*
+            Enumeration<String> reqheaderNames = req.getHeaderNames();
+
+            Collection<String> resheaderNames = res.getHeaderNames();
+
+            System.out.println("REQUEST");
+            for (; reqheaderNames.hasMoreElements(); ) {
+                Object o = reqheaderNames.nextElement();
+                System.out.println(o + ": " + req.getHeader(String.valueOf(o)));
+            }
+
+            System.out.println("RESPONSE");
+            for (String headerName : resheaderNames) {
+                System.out.println(headerName + "> " + res.getHeader(headerName));
+            }
+*/
+
+            long processingTime = -1;
+
+            //Calculate processing time (time now - when the request was first intercepted by a valve/filter)
+            try {
+                processingTime = System.currentTimeMillis() - Long.parseLong(req.getHeader(Valverine.HTTP_HEADER_RECEIVED));
+            } catch (NumberFormatException nfe) {
+                getServletContext().log("Missing or illegal value [" + Valverine.HTTP_HEADER_RECEIVED + ": " + req.getHeader(Valverine.HTTP_HEADER_RECEIVED) + "]");
+            }
+
             ServletOutputStream out = res.getOutputStream();
 
-            res.setContentType("plain/text");
+            res.setHeader(Valverine.HTTP_HEADER_METHOD, req.getMethod());
 
-            out.write((req.getMethod() + " request from " + req.getRemoteAddr() + "\n").getBytes());
+            if (processingTime > -2) {
+                res.setHeader(Valverine.HTTP_HEADER_PROCESSED, String.valueOf(processingTime));
+            }
+
+            out.write((Valverine.FULL_NAME + "\n").getBytes());
             out.flush();
             out.close();
         }

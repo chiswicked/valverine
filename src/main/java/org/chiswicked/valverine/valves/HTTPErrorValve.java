@@ -40,6 +40,7 @@ import java.io.IOException;
  */
 public class HTTPErrorValve extends TamperValve {
 
+    private int httpStatus = HttpServletResponse.SC_NOT_FOUND;
 
     /**
      * Interrupts <code>request</code> processing and throws HTTP 404 Error
@@ -51,6 +52,28 @@ public class HTTPErrorValve extends TamperValve {
      */
     @Override
     public void invoke(Request request, Response response) throws IOException, ServletException {
-        response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        this.getContainer().getLogger().debug("Forcing HTTP status " + httpStatus);
+        response.sendError(httpStatus);
+    }
+
+
+    /**
+     * <p>Set the HTTP status code to return. Defaults to HTTP error 404 if not specified</p>
+     *
+     * @param httpStatus HTTP status code
+     * @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+     * @see javax.servlet.http.HttpServletResponse
+     */
+    public synchronized void setHttpStatus(int httpStatus) {
+        Response res = new Response();
+        try {
+            res.setStatus(httpStatus);
+        } catch (Exception e) {
+            this.warn("Illegal HTTP status code: " + httpStatus);
+        } finally {
+            if (httpStatus >= 100 && httpStatus < 600) {
+                this.httpStatus = httpStatus;
+            }
+        }
     }
 }

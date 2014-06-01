@@ -1,27 +1,27 @@
 package org.chiswicked.valverine.valves;
 
-import org.apache.catalina.core.StandardEngine;
-import org.junit.After;
-import org.junit.Before;
+import org.chiswicked.tomcat.tools.BaseEmbeddedTomcatTest;
+import org.chiswicked.tomcat.tools.HttpResponse;
+import org.junit.Test;
 
-public class TimeOutValveTest extends TamperValveTest {
+import java.io.IOException;
 
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
+public class TimeOutValveTest extends BaseEmbeddedTomcatTest {
+
+    @Test(expected = IOException.class)
+    public void test1000ServerTimesOut() throws Exception {
+        TimeOutValve valve = new TimeOutValve();
+        valve.setDelay(1000);
+        getInstance().addValvetoEngine(valve);
+        HttpResponse res = getInstance().sendGet();
+        // TODO Test time?
     }
 
-    @After
-    public void tearDown() throws Exception {
-        super.tearDown();
-    }
-
-    @Override
-    protected TamperValve getConcrete() {
-        TamperValve tamperValve = new TimeOutValve();
-        tamperValve.setContainer(new StandardEngine());
-        tamperValve.setNext(terminatorValve);
-
-        return tamperValve;
+    @Test(expected = IOException.class)
+    public void testDefaultServerTimesOut() throws Exception {
+        TimeOutValve valve = new TimeOutValve();
+        getInstance().addValvetoEngine(valve);
+        HttpResponse res = getInstance().sendGet();
+        // TODO Test time?
     }
 }

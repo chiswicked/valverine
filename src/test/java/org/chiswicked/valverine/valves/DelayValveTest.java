@@ -1,13 +1,16 @@
 package org.chiswicked.valverine.valves;
 
-import org.apache.catalina.core.StandardEngine;
+import org.chiswicked.tomcat.tools.BaseEmbeddedTomcatTest;
+import org.chiswicked.tomcat.tools.HttpResponse;
+import org.chiswicked.valverine.Valverine;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class DelayValveTest extends TamperValveTest {
+public class DelayValveTest extends BaseEmbeddedTomcatTest {
 
     @Before
     public void setUp() throws Exception {
@@ -21,82 +24,77 @@ public class DelayValveTest extends TamperValveTest {
 
     @Test
     public void testInvokeBelowMinDelay1000() throws Exception {
+        DelayValve valve = new DelayValve();
+        valve.setDelay(-1000);
+        getInstance().addValvetoEngine(valve);
+        HttpResponse res = getInstance().sendGet();
 
-        int elapsedTime = doDelayedRequest((DelayValve) getConcrete(), -1000);
-
-        assertTrue("<Valve delay=\"-1000\" /> should be delayed by 0; processing took " + elapsedTime, elapsedTime >= 0 && elapsedTime < 250);
+        assertEquals(res.getBody(), RESPONSE_PATTERN_SUCCESS);
+        assertTrue(Valverine.between(Integer.valueOf(res.getHeader().get(Valverine.HTTP_HEADER_PROCESSED)), 0, 500));
     }
 
     @Test
     public void testInvokeBelowMinDelay1() throws Exception {
+        DelayValve valve = new DelayValve();
+        valve.setDelay(-1);
+        getInstance().addValvetoEngine(valve);
+        HttpResponse res = getInstance().sendGet();
 
-        int elapsedTime = doDelayedRequest((DelayValve) getConcrete(), -1);
-
-        assertTrue("<Valve delay=\"-1\" /> should be delayed by 0; processing took " + elapsedTime, elapsedTime >= 0 && elapsedTime < 250);
+        assertEquals(res.getBody(), RESPONSE_PATTERN_SUCCESS);
+        assertTrue(Valverine.between(Integer.valueOf(res.getHeader().get(Valverine.HTTP_HEADER_PROCESSED)), 0, 500));
     }
 
     @Test
     public void testInvokeWithinRange0() throws Exception {
+        DelayValve valve = new DelayValve();
+        valve.setDelay(0);
+        getInstance().addValvetoEngine(valve);
+        HttpResponse res = getInstance().sendGet();
 
-        int elapsedTime = doDelayedRequest((DelayValve) getConcrete(), 0);
-
-        assertTrue("<Valve delay=\"0\" /> should be delayed by 0; processing took " + elapsedTime, elapsedTime >= 0 && elapsedTime < 250);
+        assertEquals(res.getBody(), RESPONSE_PATTERN_SUCCESS);
+        assertTrue(Valverine.between(Integer.valueOf(res.getHeader().get(Valverine.HTTP_HEADER_PROCESSED)), 0, 500));
     }
 
     @Test
-    public void testInvokeWithinRange() throws Exception {
+    public void testInvokeDefault() throws Exception {
+        DelayValve valve = new DelayValve();
+        getInstance().addValvetoEngine(valve);
+        HttpResponse res = getInstance().sendGet();
 
-        int elapsedTime = doDelayedRequest((DelayValve) getConcrete(), 0);
-
-        assertTrue("<Valve /> should be delayed by 0; processing took " + elapsedTime, elapsedTime >= 0 && elapsedTime < 250);
+        assertEquals(res.getBody(), RESPONSE_PATTERN_SUCCESS);
+        assertTrue(Valverine.between(Integer.valueOf(res.getHeader().get(Valverine.HTTP_HEADER_PROCESSED)), 2000, 2500));
     }
 
     @Test
-    public void testInvokeWithinRange100() throws Exception {
+    public void testInvokeWithinRange500() throws Exception {
+        DelayValve valve = new DelayValve();
+        valve.setDelay(500);
+        getInstance().addValvetoEngine(valve);
+        HttpResponse res = getInstance().sendGet();
 
-        int elapsedTime = doDelayedRequest((DelayValve) getConcrete(), 100);
-
-        assertTrue("<Valve delay=\"100\" /> should be delayed by 100; processing took " + elapsedTime, elapsedTime >= 75 && elapsedTime < 350);
+        assertEquals(res.getBody(), RESPONSE_PATTERN_SUCCESS);
+        assertTrue(Valverine.between(Integer.valueOf(res.getHeader().get(Valverine.HTTP_HEADER_PROCESSED)), 500, 1000));
     }
 
     @Test
     public void testInvokeWithinRange1000() throws Exception {
+        DelayValve valve = new DelayValve();
+        valve.setDelay(1000);
+        getInstance().addValvetoEngine(valve);
+        HttpResponse res = getInstance().sendGet();
 
-        int elapsedTime = doDelayedRequest((DelayValve) getConcrete(), 1000);
-
-        assertTrue("<Valve delay=\"1000\" /> should be delayed by 1000; processing took " + elapsedTime, elapsedTime >= 975 && elapsedTime < 1250);
+        assertEquals(res.getBody(), RESPONSE_PATTERN_SUCCESS);
+        assertTrue(Valverine.between(Integer.valueOf(res.getHeader().get(Valverine.HTTP_HEADER_PROCESSED)), 1000, 1500));
     }
 
     @Test
-    public void testInvokeAboveMaxDelay31000() throws Exception {
-        int elapsedTime = doDelayedRequest((DelayValve) getConcrete(), 31000);
+    public void testInvokeAboveMaxDelay21000() throws Exception {
+        DelayValve valve = new DelayValve();
+        valve.setDelay(21000);
+        getInstance().addValvetoEngine(valve);
+        HttpResponse res = getInstance().sendGet();
 
-        assertTrue("<Valve delay=\"31000\" /> should be delayed by 30000; processing took " + elapsedTime, elapsedTime >= 29975 && elapsedTime < 30250);
-    }
-
-
-    @Override
-    protected TamperValve getConcrete() {
-        TamperValve tamperValve = new DelayValve();
-        tamperValve.setContainer(new StandardEngine());
-        tamperValve.setNext(terminatorValve);
-
-        return tamperValve;
-    }
-
-    private int doDelayedRequest(DelayValve valveToTestWith) throws Exception {
-        long startTime = System.currentTimeMillis();
-
-        valveToTestWith.invoke(requestMock, responseMock);
-
-        long endTime = System.currentTimeMillis();
-
-        return (int) (endTime - startTime);
-    }
-
-    private int doDelayedRequest(DelayValve valveToTestWith, int delay) throws Exception {
-        valveToTestWith.setDelay(delay);
-
-        return doDelayedRequest(valveToTestWith);
+        assertEquals(res.getBody(), RESPONSE_PATTERN_SUCCESS);
+        assertTrue(Valverine.between(Integer.valueOf(res.getHeader().get(Valverine.HTTP_HEADER_PROCESSED)), 20000, 20500));
     }
 }
