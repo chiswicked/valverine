@@ -50,7 +50,7 @@ public class EmbeddedTomcatTest extends BaseEmbeddedTomcatTest {
     @Test
     public void testHead() throws Exception {
         HttpResponse res = getInstance().sendHead();
-        assertEquals(RESPONSE_PATTERN_SUCCESS, res.getBody());
+        assertEquals("", res.getBody());
         assertEquals("HEAD", res.getHeader().get(Valverine.HTTP_HEADER_METHOD));
     }
 
