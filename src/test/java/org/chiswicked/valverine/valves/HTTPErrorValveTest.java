@@ -17,4 +17,40 @@ public class HTTPErrorValveTest extends BaseEmbeddedTomcatTest {
         HttpResponse res = getInstance().sendGet();
         assertEquals(404, (int) Integer.valueOf(res.getStatus()));
     }
+
+    @Test(expected = FileNotFoundException.class)
+    public void testIllegalResultsIn404() throws Exception {
+        HTTPErrorValve valve = new HTTPErrorValve();
+        valve.setHttpStatus(-99);
+        getInstance().addValvetoEngine(valve);
+        HttpResponse res = getInstance().sendGet();
+        assertEquals(404, (int) Integer.valueOf(res.getStatus()));
+    }
+
+    @Test(expected = FileNotFoundException.class)
+    public void testBelowRangeResultsIn404() throws Exception {
+        HTTPErrorValve valve = new HTTPErrorValve();
+        valve.setHttpStatus(99);
+        getInstance().addValvetoEngine(valve);
+        HttpResponse res = getInstance().sendGet();
+        assertEquals(404, (int) Integer.valueOf(res.getStatus()));
+    }
+
+    @Test(expected = FileNotFoundException.class)
+    public void testAboveRangeResultsIn404() throws Exception {
+        HTTPErrorValve valve = new HTTPErrorValve();
+        valve.setHttpStatus(999);
+        getInstance().addValvetoEngine(valve);
+        HttpResponse res = getInstance().sendGet();
+        assertEquals(404, (int) Integer.valueOf(res.getStatus()));
+    }
+
+    @Test
+    public void test200ResultsIn200() throws Exception {
+        HTTPErrorValve valve = new HTTPErrorValve();
+        valve.setHttpStatus(200);
+        getInstance().addValvetoEngine(valve);
+        HttpResponse res = getInstance().sendGet();
+        assertEquals(200, (int) Integer.valueOf(res.getStatus()));
+    }
 }
