@@ -36,43 +36,43 @@ public class EmbeddedTomcatTest extends BaseEmbeddedTomcatTest {
     @Test
     public void testGet() throws Exception {
         HttpResponse res = getInstance().sendGet();
-        assertEquals(res.getBody(), RESPONSE_PATTERN_SUCCESS);
-        assertEquals(res.getHeader().get(Valverine.HTTP_HEADER_METHOD), "GET");
+        assertEquals(RESPONSE_PATTERN_SUCCESS, res.getBody());
+        assertEquals("GET", res.getHeader().get(Valverine.HTTP_HEADER_METHOD));
     }
 
     @Test
     public void testPost() throws Exception {
         HttpResponse res = getInstance().sendPost();
-        assertEquals(res.getBody(), RESPONSE_PATTERN_SUCCESS);
-        assertEquals(res.getHeader().get(Valverine.HTTP_HEADER_METHOD), "POST");
+        assertEquals(RESPONSE_PATTERN_SUCCESS, res.getBody());
+        assertEquals("POST", res.getHeader().get(Valverine.HTTP_HEADER_METHOD));
     }
 
     @Test
     public void testHead() throws Exception {
         HttpResponse res = getInstance().sendHead();
-        assertEquals(res.getBody(), ""); // HEAD sends an empty body
-        assertEquals(res.getHeader().get(Valverine.HTTP_HEADER_METHOD), "HEAD");
+        assertEquals(RESPONSE_PATTERN_SUCCESS, res.getBody());
+        assertEquals("HEAD", res.getHeader().get(Valverine.HTTP_HEADER_METHOD));
     }
 
     @Test
     public void testOptions() throws Exception {
         HttpResponse res = getInstance().sendOptions();
-        assertEquals(res.getBody(), RESPONSE_PATTERN_SUCCESS);
-        assertEquals(res.getHeader().get(Valverine.HTTP_HEADER_METHOD), "OPTIONS");
+        assertEquals(RESPONSE_PATTERN_SUCCESS, res.getBody());
+        assertEquals("OPTIONS", res.getHeader().get(Valverine.HTTP_HEADER_METHOD));
     }
 
     @Test
     public void testPut() throws Exception {
         HttpResponse res = getInstance().sendPut();
-        assertEquals(res.getBody(), RESPONSE_PATTERN_SUCCESS);
-        assertEquals(res.getHeader().get(Valverine.HTTP_HEADER_METHOD), "PUT");
+        assertEquals(RESPONSE_PATTERN_SUCCESS, res.getBody());
+        assertEquals("PUT", res.getHeader().get(Valverine.HTTP_HEADER_METHOD));
     }
 
     @Test
     public void testDelete() throws Exception {
         HttpResponse res = getInstance().sendDelete();
-        assertEquals(res.getBody(), RESPONSE_PATTERN_SUCCESS);
-        assertEquals(res.getHeader().get(Valverine.HTTP_HEADER_METHOD), "DELETE");
+        assertEquals(RESPONSE_PATTERN_SUCCESS, res.getBody());
+        assertEquals("DELETE", res.getHeader().get(Valverine.HTTP_HEADER_METHOD));
     }
 
     @Test(expected = IOException.class)

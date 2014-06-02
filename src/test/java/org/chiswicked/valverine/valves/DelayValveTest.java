@@ -29,7 +29,7 @@ public class DelayValveTest extends BaseEmbeddedTomcatTest {
         getInstance().addValvetoEngine(valve);
         HttpResponse res = getInstance().sendGet();
 
-        assertEquals(res.getBody(), RESPONSE_PATTERN_SUCCESS);
+        assertEquals(RESPONSE_PATTERN_SUCCESS, res.getBody());
         assertTrue(Valverine.between(Integer.valueOf(res.getHeader().get(Valverine.HTTP_HEADER_PROCESSED)), 0, 500));
     }
 
@@ -40,7 +40,7 @@ public class DelayValveTest extends BaseEmbeddedTomcatTest {
         getInstance().addValvetoEngine(valve);
         HttpResponse res = getInstance().sendGet();
 
-        assertEquals(res.getBody(), RESPONSE_PATTERN_SUCCESS);
+        assertEquals(RESPONSE_PATTERN_SUCCESS, res.getBody());
         assertTrue(Valverine.between(Integer.valueOf(res.getHeader().get(Valverine.HTTP_HEADER_PROCESSED)), 0, 500));
     }
 
@@ -51,7 +51,7 @@ public class DelayValveTest extends BaseEmbeddedTomcatTest {
         getInstance().addValvetoEngine(valve);
         HttpResponse res = getInstance().sendGet();
 
-        assertEquals(res.getBody(), RESPONSE_PATTERN_SUCCESS);
+        assertEquals(RESPONSE_PATTERN_SUCCESS, res.getBody());
         assertTrue(Valverine.between(Integer.valueOf(res.getHeader().get(Valverine.HTTP_HEADER_PROCESSED)), 0, 500));
     }
 
@@ -61,7 +61,7 @@ public class DelayValveTest extends BaseEmbeddedTomcatTest {
         getInstance().addValvetoEngine(valve);
         HttpResponse res = getInstance().sendGet();
 
-        assertEquals(res.getBody(), RESPONSE_PATTERN_SUCCESS);
+        assertEquals(RESPONSE_PATTERN_SUCCESS, res.getBody());
         assertTrue(Valverine.between(Integer.valueOf(res.getHeader().get(Valverine.HTTP_HEADER_PROCESSED)), 2000, 2500));
     }
 
@@ -72,7 +72,7 @@ public class DelayValveTest extends BaseEmbeddedTomcatTest {
         getInstance().addValvetoEngine(valve);
         HttpResponse res = getInstance().sendGet();
 
-        assertEquals(res.getBody(), RESPONSE_PATTERN_SUCCESS);
+        assertEquals(RESPONSE_PATTERN_SUCCESS, res.getBody());
         assertTrue(Valverine.between(Integer.valueOf(res.getHeader().get(Valverine.HTTP_HEADER_PROCESSED)), 500, 1000));
     }
 
@@ -83,7 +83,7 @@ public class DelayValveTest extends BaseEmbeddedTomcatTest {
         getInstance().addValvetoEngine(valve);
         HttpResponse res = getInstance().sendGet();
 
-        assertEquals(res.getBody(), RESPONSE_PATTERN_SUCCESS);
+        assertEquals(RESPONSE_PATTERN_SUCCESS, res.getBody());
         assertTrue(Valverine.between(Integer.valueOf(res.getHeader().get(Valverine.HTTP_HEADER_PROCESSED)), 1000, 1500));
     }
 
@@ -94,7 +94,7 @@ public class DelayValveTest extends BaseEmbeddedTomcatTest {
         getInstance().addValvetoEngine(valve);
         HttpResponse res = getInstance().sendGet();
 
-        assertEquals(res.getBody(), RESPONSE_PATTERN_SUCCESS);
+        assertEquals(RESPONSE_PATTERN_SUCCESS, res.getBody());
         assertTrue(Valverine.between(Integer.valueOf(res.getHeader().get(Valverine.HTTP_HEADER_PROCESSED)), 20000, 20500));
     }
 }
