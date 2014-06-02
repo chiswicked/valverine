@@ -161,7 +161,7 @@ public final class EmbeddedTomcat {
     public HttpResponse sendGet()
             throws Exception {
         // TODO Implement more user-friendly error handling mechanism
-        return this.sendMethod("GET", 0);
+        return this.sendMethod(HttpMethod.GET, 0);
     }
 
 
@@ -175,7 +175,7 @@ public final class EmbeddedTomcat {
     public HttpResponse sendGet(int timeout)
             throws Exception {
         // TODO Implement more user-friendly error handling mechanism
-        return this.sendMethod("GET", timeout);
+        return this.sendMethod(HttpMethod.GET, timeout);
     }
 
 
@@ -188,7 +188,7 @@ public final class EmbeddedTomcat {
     public HttpResponse sendPost()
             throws Exception {
         // TODO Implement more user-friendly error handling mechanism
-        return this.sendMethod("POST", 0);
+        return this.sendMethod(HttpMethod.POST, 0);
     }
 
 
@@ -202,7 +202,7 @@ public final class EmbeddedTomcat {
     public HttpResponse sendPost(int timeout)
             throws Exception {
         // TODO Implement more user-friendly error handling mechanism
-        return this.sendMethod("POST", timeout);
+        return this.sendMethod(HttpMethod.POST, timeout);
     }
 
 
@@ -215,7 +215,7 @@ public final class EmbeddedTomcat {
     public HttpResponse sendHead()
             throws Exception {
         // TODO Implement more user-friendly error handling mechanism
-        return this.sendMethod("HEAD", 0);
+        return this.sendMethod(HttpMethod.HEAD, 0);
     }
 
 
@@ -229,7 +229,7 @@ public final class EmbeddedTomcat {
     public HttpResponse sendHead(int timeout)
             throws Exception {
         // TODO Implement more user-friendly error handling mechanism
-        return this.sendMethod("HEAD", timeout);
+        return this.sendMethod(HttpMethod.HEAD, timeout);
     }
 
 
@@ -242,7 +242,7 @@ public final class EmbeddedTomcat {
     public HttpResponse sendOptions()
             throws Exception {
         // TODO Implement more user-friendly error handling mechanism
-        return this.sendMethod("OPTIONS", 0);
+        return this.sendMethod(HttpMethod.OPTIONS, 0);
     }
 
 
@@ -256,7 +256,7 @@ public final class EmbeddedTomcat {
     public HttpResponse sendOptions(int timeout)
             throws Exception {
         // TODO Implement more user-friendly error handling mechanism
-        return this.sendMethod("OPTIONS", timeout);
+        return this.sendMethod(HttpMethod.OPTIONS, timeout);
     }
 
 
@@ -269,7 +269,7 @@ public final class EmbeddedTomcat {
     public HttpResponse sendPut()
             throws Exception {
         // TODO Implement more user-friendly error handling mechanism
-        return this.sendMethod("PUT", 0);
+        return this.sendMethod(HttpMethod.PUT, 0);
     }
 
 
@@ -283,7 +283,7 @@ public final class EmbeddedTomcat {
     public HttpResponse sendPut(int timeout)
             throws Exception {
         // TODO Implement more user-friendly error handling mechanism
-        return this.sendMethod("PUT", timeout);
+        return this.sendMethod(HttpMethod.PUT, timeout);
     }
 
 
@@ -296,7 +296,7 @@ public final class EmbeddedTomcat {
     public HttpResponse sendDelete()
             throws Exception {
         // TODO Implement more user-friendly error handling mechanism
-        return this.sendMethod("DELETE", 0);
+        return this.sendMethod(HttpMethod.DELETE, 0);
     }
 
 
@@ -310,7 +310,7 @@ public final class EmbeddedTomcat {
     public HttpResponse sendDelete(int timeout)
             throws Exception {
         // TODO Implement more user-friendly error handling mechanism
-        return this.sendMethod("DELETE", timeout);
+        return this.sendMethod(HttpMethod.DELETE, timeout);
     }
 
 
@@ -323,7 +323,7 @@ public final class EmbeddedTomcat {
     public HttpResponse sendTrace()
             throws Exception {
         // TODO Implement more user-friendly error handling mechanism
-        return this.sendMethod("TRACE", 0);
+        return this.sendMethod(HttpMethod.TRACE, 0);
     }
 
     /**
@@ -336,7 +336,7 @@ public final class EmbeddedTomcat {
     public HttpResponse sendTrace(int timeout)
             throws Exception {
         // TODO Implement more user-friendly error handling mechanism
-        return this.sendMethod("TRACE", timeout);
+        return this.sendMethod(HttpMethod.TRACE, timeout);
     }
 
 
@@ -353,7 +353,7 @@ public final class EmbeddedTomcat {
             connection.setRequestMethod(method);
         } catch (ProtocolException pe) {
             try {
-                connection.setRequestMethod("GET");
+                connection.setRequestMethod(HttpMethod.GET);
             } catch (ProtocolException peg) {
                 tomcat.getEngine().getLogger().error(peg.getMessage());
                 // TODO Possibly we want to terminate processing here
