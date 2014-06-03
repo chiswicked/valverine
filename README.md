@@ -1,16 +1,36 @@
-# Valverine
+# Valverine v0.1
 #### Java Servlet Container Test Tools
 [![Build Status](https://travis-ci.org/chiswicked/valverine.svg?branch=master)](https://travis-ci.org/chiswicked/valverine)
 ---
-## GOAL
+## Goal
 
 Coming soon...
 
-## OVERVIEW
+## Overview
 
 Coming soon...
 
-## LICENSE
+## Install
+
+By default Valverine will install to $HOME/www/tomcat/lib
+```
+git clone https://github.com/chiswicked/valverine.git
+cd valverine
+mvn clean install
+```
+
+Or you can specify explicitly where the tomcat instance is located under which you are intending to install Valverine
+```
+git clone https://github.com/chiswicked/valverine.git
+cd valverine
+mvn clean install -Dtomcat.home=/var/www/apache-tomcat-8.0.5  
+```
+
+## Usage
+
+Coming soon...
+
+## License
 
 The MIT License (MIT)
 
